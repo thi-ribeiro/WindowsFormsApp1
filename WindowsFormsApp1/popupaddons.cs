@@ -7,17 +7,17 @@ namespace WindowsFormsApp1
     public partial class popupaddons : Form
     {
         Form1 formPrincipal = new Form1();
-        public string pathw, pathwtf, pathrealm, pathcharacter;
+        public string pathw, PathWtf, PathUserRealm, PathCharacter;
         public bool pathok;
-        public popupaddons(string PathWow, bool pathOk, string PathWtf, string PathUserRealm, string PathCharacter)
+        public popupaddons(string PathWow, bool pathOk)
         {
             InitializeComponent();
 
             pathok = pathOk;
             pathw = PathWow;
-            pathwtf = PathWtf;
-            pathrealm = PathUserRealm;
-            pathcharacter = PathCharacter;
+            //pathwtf = PathWtf;
+            //pathrealm = PathUserRealm;
+            //pathcharacter = PathCharacter;
         }
         private void popupaddons_Load(object sender, EventArgs e)
         {
@@ -27,8 +27,10 @@ namespace WindowsFormsApp1
                 dropdownrealms.Text = Properties.Settings.Default.wtfrealms;
                 dropdowncharlist.Text = Properties.Settings.Default.wtfusuariocharlist;
 
-                carregaDiretorio();
+                carregaDiretorio(); //Carrega o path principal de addons do Wow
                 CarregaUsuarios(pathw);
+
+                //MessageBox.Show(PathWtf);
             }
         }
         public void carregaDiretorio()
@@ -85,7 +87,68 @@ namespace WindowsFormsApp1
                 }
             }
         }
+        private void CarregaUsuarios(string PathWow)
+        {
+            dropdownusuarios.Items.Clear();
 
+            PathWtf = $@"{pathw}\Wtf\Account";
+
+            if (Directory.Exists(PathWtf))
+            {
+                string[] usuarios = Directory.GetDirectories(PathWtf);
+
+                foreach (string diretorioUsuario in usuarios)
+                {
+                    string diretorioUsuarioClean = diretorioUsuario.Substring(diretorioUsuario.LastIndexOf(@"\") + 1);
+                    dropdownusuarios.Items.Add(diretorioUsuarioClean);
+                }
+
+                dropdownusuarios.SelectedIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("Diretório Wtf do usuário não existe!");
+            }
+        }
+        private void CarregaRealm(string PathWtf)
+        {
+            string wtfDir = $@"{PathWtf}\{dropdownusuarios.Text}\";
+        
+                string[] checkNothing = { "bindings-cache", "cache", "SavedVariables" };
+                string[] dirUsuarioAddons = Directory.GetDirectories(wtfDir);
+
+                dropdownrealms.Items.Clear();
+
+                foreach (string realmNameDir in dirUsuarioAddons)
+                {
+                    if (Directory.Exists(realmNameDir))
+                    {
+                        string realmDirectoryCleaner = realmNameDir.Substring(realmNameDir.LastIndexOf(@"\") + 1);
+
+                        if (!realmDirectoryCleaner.Contains(checkNothing[2]))
+                        {
+                            PathUserRealm = realmNameDir;
+                            dropdownrealms.Items.Add(realmDirectoryCleaner);
+                        }
+                        dropdownrealms.SelectedIndex = 0;
+                    }
+                }
+        }
+        private void CarregaChars(string PathUserRealm)
+        {
+            dropdowncharlist.Items.Clear();
+
+            string[] dirCharsList = Directory.GetDirectories(PathUserRealm);         
+
+            foreach (string character in dirCharsList)
+            {
+                string characterDirectory = character.Substring(character.LastIndexOf(@"\") + 1);
+                dropdowncharlist.Items.Add(characterDirectory);
+            }
+            dropdowncharlist.SelectedIndex = 0;
+
+            CarregaCharsChecked();
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             foreach (string item in checkedListBox1.CheckedItems)
@@ -105,85 +168,23 @@ namespace WindowsFormsApp1
             }
             carregaDiretorio();
         }
-        private void CarregaRealm(string pathWtf)
+        private void dropdownrealms_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            string wtfDir = $@"{pathwtf}\{dropdownusuarios.Text}\";
-        
-                string[] checkNothing = { "bindings-cache", "cache", "SavedVariables" };
-                string[] dirUsuarioAddons = Directory.GetDirectories(wtfDir);
-
-                dropdownrealms.Items.Clear();
-                dropdowncharlist.Items.Clear();
-
-                foreach (string realmNameDir in dirUsuarioAddons)
-                {
-                    if (Directory.Exists(realmNameDir))
-                    {
-                        string realmDirectoryCleaner = realmNameDir.Substring(realmNameDir.LastIndexOf(@"\") + 1);
-
-                        if (!realmDirectoryCleaner.Contains(checkNothing[2]))
-                        {
-                            formPrincipal.PathUserRealm = realmNameDir;
-                            dropdownrealms.Items.Add(realmDirectoryCleaner);
-                        }
-                        dropdownrealms.SelectedIndex = 0;
-                    }
-                }
-        }
-        private void CarregaChars(string PathUserRealm)
-        {
-            string[] dirCharsList = Directory.GetDirectories(PathUserRealm);         
-
-            foreach (string character in dirCharsList)
-            {
-
-                string characterDirectory = character.Substring(character.LastIndexOf(@"\") + 1);
-                dropdowncharlist.Items.Add(characterDirectory);
-
-            }
-            dropdowncharlist.SelectedIndex = 0;
-            CarregaCharsChecked();
-        }
-        private void CarregaUsuarios(string PathWow)
-        {
-            dropdownusuarios.Items.Clear();
-
-            string pathwtf_ = $@"{pathw}\Wtf\Account";
-
-            if (Directory.Exists(pathwtf_))
-            {
-                string[] usuarios = Directory.GetDirectories(pathwtf_);
-
-                foreach (string diretorioUsuario in usuarios)
-                {
-                    string diretorioUsuarioClean = diretorioUsuario.Substring(diretorioUsuario.LastIndexOf(@"\") + 1);
-                    dropdownusuarios.Items.Add(diretorioUsuarioClean);
-                }
-
-                dropdownusuarios.SelectedIndex = 0;
-            } else
-            {
-                MessageBox.Show("Diretório Wtf do usuário não existe!");
-            }
-        }
-
-        private void dropdownrealms_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CarregaChars(pathrealm);
+            CarregaChars(PathUserRealm);
             Properties.Settings.Default.wtfrealms = this.Text;
             Properties.Settings.Default.Save();
         }
 
-        private void dropdownusuarios_SelectedIndexChanged(object sender, EventArgs e)
+        private void dropdownusuarios_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            CarregaRealm(pathwtf);
+            CarregaRealm(PathWtf);
             Properties.Settings.Default.wtfusuario = this.Text;
             Properties.Settings.Default.Save();
         }
 
         public void CarregaCharsChecked()
         {
-            string formarPathCharacter = $@"{pathrealm}{pathcharacter}\{dropdowncharlist.Text}";
+            string formarPathCharacter = $@"{PathUserRealm}{PathCharacter}\{dropdowncharlist.Text}";
             bool arquivo = File.Exists($@"{formarPathCharacter}\AddOns.txt");
 
             if (dropdowncharlist.Items.Count > 0 && arquivo)

@@ -156,6 +156,7 @@
             this.dropdownrealms.Size = new System.Drawing.Size(88, 21);
             this.dropdownrealms.TabIndex = 21;
             this.dropdownrealms.Tag = "Usuários";
+            this.dropdownrealms.SelectedIndexChanged += new System.EventHandler(this.dropdownrealms_SelectedIndexChanged_1);
             // 
             // dropdownusuarios
             // 
@@ -166,6 +167,7 @@
             this.dropdownusuarios.Size = new System.Drawing.Size(93, 21);
             this.dropdownusuarios.TabIndex = 22;
             this.dropdownusuarios.Tag = "Usuários";
+            this.dropdownusuarios.SelectedIndexChanged += new System.EventHandler(this.dropdownusuarios_SelectedIndexChanged_1);
             // 
             // button4
             // 

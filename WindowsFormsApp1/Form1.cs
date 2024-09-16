@@ -8,9 +8,9 @@ namespace WindowsFormsApp1
     public partial class Form1 : Form
     {
         public string PathWow;
-        public string PathWtf;
-        public string PathUserRealm;
-        public string PathCharacter;
+        //public string PathWtf;
+        //public string PathUserRealm;
+        //public string PathCharacter;
         public Boolean PathOk;
 
         public Form1()
@@ -84,7 +84,9 @@ namespace WindowsFormsApp1
                 startInfo.Arguments += openglcheckbox.Checked ? "-OpenGL" : null;
                 startInfo.Arguments += consolecheckbox.Checked ? "-Console" : null;
 
-                Process.Start(startInfo);
+                startInfo.Verb = "runas";
+                Process.Start(startInfo);                             
+                
                 this.Hide();
             }
             else
@@ -107,12 +109,12 @@ namespace WindowsFormsApp1
             {
                 achaWow(Properties.Settings.Default.Pathconf);
 
-                DialogResult inicializar = MessageBox.Show("Executável encontrado, inicializar diretamente?", "Inicialização", MessageBoxButtons.OKCancel);
-                if (inicializar == DialogResult.OK) 
-                {
-                    InicializaWow();
-                    this.Hide();
-                }
+                //DialogResult inicializar = MessageBox.Show("Executável encontrado, inicializar diretamente?", "Inicialização", MessageBoxButtons.OKCancel);
+                //if (inicializar == DialogResult.OK) 
+                //{
+                //    this.Hide();
+                //    InicializaWow();              
+                //}
             }
         }
 
@@ -148,7 +150,7 @@ namespace WindowsFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            popupaddons formadds = new popupaddons(PathWow, PathOk, PathUserRealm, PathCharacter, PathWtf);
+            popupaddons formadds = new popupaddons(PathWow, PathOk);
             formadds.Show();
         }
 

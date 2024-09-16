@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{8D7241FF-AEB4-45B9-A5A7-331F48462A3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WowWDBCleaner", "WindowsFormsApp1\WowWDBCleaner.csproj", "{8D7241FF-AEB4-45B9-A5A7-331F48462A3E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

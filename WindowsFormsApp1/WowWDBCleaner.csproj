@@ -26,7 +26,7 @@
     <ProductName>Wow WDB Cleaner</ProductName>
     <PublisherName>Thiago</PublisherName>
     <SuiteName>wowcleaner</SuiteName>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>14</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
