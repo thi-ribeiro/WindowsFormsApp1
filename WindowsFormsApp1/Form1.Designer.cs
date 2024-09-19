@@ -73,7 +73,8 @@
             this.toolStripStatusLabel1.AutoToolTip = true;
             this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(76, 17);
+            this.toolStripStatusLabel1.Text = "WDB Cleaner";
             // 
             // notifyIcon1
             // 

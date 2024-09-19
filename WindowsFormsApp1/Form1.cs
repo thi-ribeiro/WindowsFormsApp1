@@ -11,7 +11,7 @@ namespace WindowsFormsApp1
         //public string PathWtf;
         //public string PathUserRealm;
         //public string PathCharacter;
-        public Boolean PathOk;
+        public Boolean PathBool;
 
         public Form1()
         {
@@ -25,36 +25,30 @@ namespace WindowsFormsApp1
             if (folderBrowserDialog1.SelectedPath != null)
             {
                 pathtextbox.Text = folderBrowserDialog1.SelectedPath;
-                PathWow = folderBrowserDialog1.SelectedPath;
-                achaWow(folderBrowserDialog1.SelectedPath);
+                //PathWow = folderBrowserDialog1.SelectedPath;
+                // achaWow(folderBrowserDialog1.SelectedPath);
+                VerificaPathWow();
             }
 
             Properties.Settings.Default.Pathconf = pathtextbox.Text;
             Properties.Settings.Default.Save();
         }
 
-        public void achaWow(string path)
+        public void VerificaPathWow()
         {
-            string pathWowInside = $@"{path}\WoW.exe";
-            if (File.Exists(pathWowInside))
-            {
-                toolStripStatusLabel1.Text = "Wow encontrado!";
-                PathWow = path;
-                PathOk = true;
-                // CarregaUsuarios(PathWow); //Remover após carregar os dados do dropdownlist
-            }
-            else
-            {
-                toolStripStatusLabel1.Text = "Executável 'WoW.exe', não foi encontrado!";
-                PathOk = false;
-                //checkedListBox1.Items.Clear();
-            }
+            string PathFromFolderDialog = folderBrowserDialog1.SelectedPath;
+            string PathWowUser = PathFromFolderDialog.Length > 0 ? PathFromFolderDialog : Properties.Settings.Default.Pathconf;
+            string PathWowExe = $@"{PathWowUser}\WoW.exe";
+
+            PathBool = File.Exists(PathWowExe);
+            PathWow = PathBool ? PathWowExe : toolStripStatusLabel1.Text = "Executável 'WoW.exe', não foi encontrado!";
+
+            toolStripStatusLabel1.Text = PathBool ? "Wow encontrado!" : "Executável 'WoW.exe', não foi encontrado!";
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             InicializaWow();
-
         }
 
         private void InicializaWow()
@@ -63,7 +57,7 @@ namespace WindowsFormsApp1
             string dirWoW = $@"{PathWow}\WoW.exe";
             string dirWtf = $@"{PathWow}\WTF";
 
-            statusStrip1.Text = null;
+            toolStripStatusLabel1.Text = null;
 
             ProcessStartInfo startInfo = new ProcessStartInfo(dirWoW);
 
@@ -72,13 +66,13 @@ namespace WindowsFormsApp1
                 if (checkBox2.Checked && Directory.Exists(dirWDB))
                 {
                     Directory.Delete(dirWDB, true);
-                    statusStrip1.Text += "Diretório WDB foi removido!";
+                    toolStripStatusLabel1.Text += "Diretório WDB foi removido!";
                 }
 
                 if (checkBox1.Checked && Directory.Exists(dirWtf))
                 {
                     Directory.Delete(dirWtf, true);
-                    statusStrip1.Text += "Diretório WTF foi removido!";
+                    toolStripStatusLabel1.Text += "Diretório WTF foi removido!";
                 }
 
                 startInfo.Arguments += openglcheckbox.Checked ? "-OpenGL" : null;
@@ -91,7 +85,7 @@ namespace WindowsFormsApp1
             }
             else
             {
-                toolStripStatusLabel1.Text = "Executável 'WoW.exe', não foi encontrado!";
+                toolStripStatusLabel1.Text = "Selecione corretamente a pasta do Wow.exe!";
             }
         }
 
@@ -101,21 +95,7 @@ namespace WindowsFormsApp1
             pathtextbox.Text = Properties.Settings.Default.Pathconf;
             openglcheckbox.Checked = Properties.Settings.Default.OpenGL;
 
-            string pathWowDefault = Properties.Settings.Default.Pathconf;
-
-            achaWow(pathWowDefault);            
-
-            if (PathOk)
-            {
-                achaWow(Properties.Settings.Default.Pathconf);
-
-                //DialogResult inicializar = MessageBox.Show("Executável encontrado, inicializar diretamente?", "Inicialização", MessageBoxButtons.OKCancel);
-                //if (inicializar == DialogResult.OK) 
-                //{
-                //    this.Hide();
-                //    InicializaWow();              
-                //}
-            }
+            VerificaPathWow();
         }
 
         private void checkBox2_CheckedChanged_1(object sender, EventArgs e)
@@ -137,23 +117,19 @@ namespace WindowsFormsApp1
         {
             this.Hide();
         }
-
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
             this.Show();
         }
-
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
-            popupaddons formadds = new popupaddons(PathWow, PathOk);
+            popupaddons formadds = new popupaddons(PathWow, PathBool);
             formadds.Show();
         }
-
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.ClearWtf = checkBox1.Checked;
